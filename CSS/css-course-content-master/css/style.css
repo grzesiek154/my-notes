@@ -1,0 +1,7 @@
+#service-image {
+	height: 400px;
+	width: 70vw;
+
+	background: radial-gradient(circle, red 20%, blue 40%, green 55%);
+	border: 10px solid rgb(28, 28, 79);
+}
