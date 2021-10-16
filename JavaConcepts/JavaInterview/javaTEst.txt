@@ -1,0 +1,22 @@
+In Java 8, which mechanism is used for preserving backward compatibility when extending the functionality of the interface?
+
+Which variable can be placed in a try-with-resource block (since Java 9)?
+
+What does dead code mean?
+
+Does it make sense to invert the test pyramid?
+
+ow can you resolve a NoUniqueBeanDefinitionException?
+
+Which annotations are included in springbootaplication? 
+
+Which of the following Spring annotations allow resolving dependencies by field injection?
+
+What is true about Application Context Hierarchy?
+
+How many caching levels do we have in Hibernate?
+What are the different fetching ways in Hibernate?
+
+What are the three types of Hibernate object states?
+
+What are the three types of Hibernate object states?

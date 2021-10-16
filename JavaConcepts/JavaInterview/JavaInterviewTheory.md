@@ -1,10 +1,21 @@
-# 1. Explain JDK, JRE and JVM?
+# 1.  Java Basic
+
+## Explain JDK, JRE and JVM?
 
 | **JDK**                                                      | **JRE**                                                      | **JVM**                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | It stands for Java Development Kit.                          | It stands for Java Runtime Environment.                      | It stands for Java Virtual Machine.                          |
 | It is the tool necessary to compile, document and package Java programs. | JRE refers to a runtime environment in which Java bytecode can be executed. | It is an abstract machine. It is a specification that provides a run-time environment in which Java bytecode can be executed. |
 | It contains JRE + development tools.                         | It’s an implementation of the JVM which physically exists.   | JVM follows three notations: Specification, **Implementation,** and **Runtime Instance**. |
+
+## Access modifiers
+
+| Modifier    | Class | Package | Subclass | World |
+| ----------- | ----- | ------- | -------- | ----- |
+| `public`    | Y     | Y       | Y        | Y     |
+| `protected` | Y     | Y       | Y        | N     |
+| no modifier | Y     | Y       | N        | N     |
+| `private`   | Y     | N       | N        | N     |
 
 # **2. What all does JVM comprise of?**
 
@@ -168,7 +179,46 @@ The composition is also a way to achieve Association. The composition represents
 
 https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html
 
-An *array* is a container object that holds a fixed number of  values of a single type. The length of an array is established when the  array is created. After creation, its length is fixed. You have seen an  example of arrays already, in the `main` method of the "Hello World!" application. This section discusses arrays in greater detail.
+An *array* is a container object that holds a fixed number of  values of a single type. The length of an array is established when the  array is created. After creation, its length is fixed. 
+
+### Features
+
+- tablice są doskonałym wyborem gdy elementy są odczytywane nie po kolei, ponieważ dostęp do kazdego z nich jest natychmiastowy
+- kiedy należy wstawić element do środka listy sa lepszym wyborem, ponieważ wystarczy tylko zmienic referencje następnego elementu oraz poprzedniego, w tablicy natomiast musielibyśmy przesunąć wszystkie elementy znajdujące się za miejscem wstawienia
+- dostęp swobodny, możliwość przejścia bezpośrednio do 10 elementu
+
+### Efficency
+
+Odczyt = O(1)
+
+Wstawianie = O(n)
+
+Usuwanie = O(n)
+
+## ArrayList 
+
+https://stackoverflow.com/questions/322715/when-to-use-linkedlist-over-arraylist-in-java
+
+ArrayList can be perceived as a dynamic array that allows you to add or  remove elements from it any time or simply said, dynamically. In other words, its size can increase or decrease dynamically unlike arrays whose size remains static once declared.
+
+![https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/02/Hierarchy-for-the-ArrayList-class.png](https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/02/Hierarchy-for-the-ArrayList-class.png)
+
+### Features
+
+- The ArrayList class of Java stores elements by maintaining the insertion order.
+- The ArrayList allows duplicate elements stored in it.
+- ArrayList is not synchronized, the major point that differentiates the ArrayList from Vector class in Java.
+- The ArrayList class cannot contain primitive types but only objects. In  this case, we usually call it as ‘ArrayList of objects’. So if you want  to store integer type of elements, then you have to use the Integer  object of the wrapper class and not primitive type int.
+- Also, if you have large lists, keep in mind that memory usage is also different. Each element of a `LinkedList` has more overhead since pointers to the next and previous elements are also stored. `ArrayLists` don't have this overhead. However, `ArrayLists` take up as much memory as is allocated for the capacity, regardless of whether elements have actually been added.
+- The default initial capacity of an `ArrayList` is pretty  small (10 from Java 1.4 - 1.8). But since the underlying implementation  is an array, the array must be resized if you add a lot of elements. To  avoid the high cost of resizing when you know you're going to add a lot  of elements, construct the `ArrayList` with a higher initial capacity.
+
+### Efficency
+
+Odczyt = O(1)
+
+Wstawianie = O(n)
+
+Usuwanie = O(n)
 
 ## String pool
 
@@ -178,19 +228,102 @@ Java String pool refers to a collection of Strings which are stored in heap  mem
 
 **![String pool - Java Interview Questions - Edureka](https://www.edureka.co/blog/content/ver.1556012641/uploads/2019/04/String-pool.png)**
 
-## Linked list
+## Linked List (Listy powiązane)
 
-A linked list is a data structure that represents a sequence of nodes. In a singly linked list, each node points to the next node in the linked list. A doubly linked list gives each node pointers to both the next node and the previous node.
+https://stackoverflow.com/questions/322715/when-to-use-linkedlist-over-arraylist-in-java
 
- Unlike an array, a linked list does not provide constant time access to a particular "index" within the list. This means that if you'd like to find the Kth element in the list, you will need to iterate through K elements. The benefit of a linked list is that you can add and remove items from the beginning of the list in constant time. For specific applications, this can be useful.
+### Single Linked list
 
-## Linked list vs Array List
+każdy element zawiera adres nastepnego elementu na liscie, w ten sposób grupa losowa wybranych adresów w pamięci zostałą ze sobą powiązana.
 
-![image-20210907152853174](C:\Users\gmalarski\AppData\Roaming\Typora\typora-user-images\image-20210907152853174.png)
+![https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/03/1-10.png](https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/03/1-10.png)
 
-![https://www.programcreek.com/wp-content/uploads/2013/03/arraylist-vs-linkedlist-complexity.png](https://www.programcreek.com/wp-content/uploads/2013/03/arraylist-vs-linkedlist-complexity.png)
+The “Head” of the LinkedList is a pointer that contains the address of  the first element in the LinkedList. The last node in the LinkedList is  the tail. As shown in the figure above, the address part of the last  node in the LinkedList is set to ‘Null’ indicating the end of the  LinkedList.
 
-# Stack
+### **Doubly Linked List**
+
+https://docs.oracle.com/javase/7/docs/api/java/util/LinkedList.html
+
+Doubly-linked list implementation of the `List` and `Deque` interfaces.  Implements all optional list operations, and permits all elements (including `null`).  
+
+There is another version known as “**Doubly Linked List**” whose each node has three parts:
+
+1. Address or reference or pointer to the previous element in the LinkedList.
+2. Data part
+3. Address or reference or pointer to the next element in the LinkedList.
+
+The previous address of the first element in the LinkedList will be  set to Null while the next pointer of the Last element in the LinkedList is set to Null.
+
+**Representation Of Doubly Linked List:**
+
+![https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/03/2-9.png](https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/03/2-9.png)
+
+### Java LinkedList Class
+
+In Java, the linked list is implemented by the “***LinkedList\***” class. This class belongs to the “***java.util\***” package. The LinkedList class implements the List and Deque interfaces and inherits the AbstractList class.
+
+![https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/03/3-9.png](https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/03/3-9.png)
+
+### LinkedList features:
+
+- Listy powiązane są swietnym rozwiązaniem gdy wiadomo że i tak trzeba będzie odczytywać wszystkie elementy na raz, wówczas można odczytać jeden element, odczytać adres następnego itd.
+- Jeżeli zamierzamy odczytywac elementy niereguralnie lista powiązana jest złym wyborem
+- Dostęp sekwencyjny, aby ofczytać 10 element listy należy najpierw odczyta 9 poprzednich
+- kiedy należy wstawić element do środka listy sa lepszym wyborem, ponieważ wystarczy tylko zmienic referencje następnego elementu oraz poprzedniego, w tablicy natomiast musielibyśmy przesunąć wszystkie elementy znajdujące się za miejscem wstawienia
+- Also, if you have large lists, keep in mind that memory usage is also different. Each element of a `LinkedList` has more overhead since pointers to the next and previous elements are also stored. `ArrayLists` don't have this overhead. However, `ArrayLists` take up as much memory as is allocated for the capacity, regardless of whether elements have actually been added.
+- The default initial capacity of an `ArrayList` is pretty  small (10 from Java 1.4 - 1.8). But since the underlying implementation  is an array, the array must be resized if you add a lot of elements. To  avoid the high cost of resizing when you know you're going to add a lot  of elements, construct the `ArrayList` with a higher initial capacity.
+
+### Efficency
+
+Odczyt = O(n)
+
+Wstawianie = O(1)
+
+Usuwanie = O(1)
+
+## Maps
+
+Maps collection in Java is a collection that maps a key to a value. It  is a collection consisting of keys and values. Each entry in the map  consists of a key with its corresponding value. The keys are unique in  maps. Maps can be used typically when we need to modify a collection  based on a key value.
+
+The map in Java is a part of the java.util.map interface. The map  interface **is not a part of the collection** interface and that is the  reason for which maps are different from the other collections.
+
+![https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/03/1-11.png](https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/03/1-11.png)
+
+### Features
+
+1. In maps, each key can map to the at most one value. Also, there cannot be duplicate keys in maps.
+2. Map implementations like HashMap and LinkedHashMap allow null key and null values. However, TreeMap does not allow it.
+3. A map cannot be traversed as it is. Hence for traversing, it needs to be converted to set using keyset () or entrySet () method.
+
+## Set
+
+Set in Java is an interface that is a part of the Java Collection  Framework and implements the Collection interface. A set collection  provides the features of a mathematical set.
+
+A set can be defined as a collection of unordered objects and it  cannot contain duplicate values. As the set interface inherits the  Collection interface, it implements all the methods of the Collection  interface.
+
+![https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/04/1-7.png](https://www.softwaretestinghelp.com/wp-content/qa/uploads/2020/04/1-7.png)
+
+### Features
+
+1. The set interface is a part of the Java Collections Framework.
+2. The set interface allows for unique values.
+3. It can have at most one null value.
+4. Java 8 provides a default method for the set interface – Spliterator.
+5. The set interface does not support the indexes of the elements.
+6. The set interface supports generics.
+
+## Vectors
+
+A vector can be defined as a dynamic array that can grow or shrink on its own i.e. vector will grow when more elements are added to it and  will shrink when elements are removed from it.
+
+This behavior is unlike that of arrays which are static. But similar  to arrays, vector elements can be accessed using integer indices.
+
+A vector can be viewed as similar to another dynamic array data structure, **ArrayList except for the two below differences:**
+
+- The vector is synchronized i.e. all the methods in Vector are marked ‘synchronized’ and thus once a method is invoked, the same method  cannot be invoked unless the previous call has ended.
+- The vector class has many methods that are not a part of the collections framework but its legacy methods.
+
+## Stack
 
 In programming, a stack is an abstract, linear data type with a  predefined capacity (or boundary). It follows a particular order for  adding or removing elements. Linear data structures organize their  components in a straight line, so if we we add or remove an element,  they will grow or shrink respectively.
 
@@ -213,7 +346,7 @@ It uses the following operations:
 
 data structure and big o
 
-# 4 Base design patterns
+# 5 Base design patterns
 
 ## Singleton
 
@@ -269,5 +402,179 @@ class Application is
         // the variable `foo`.
 ```
 
-5 functional interfaces and streams
+# 6 Functional interfaces and streams
 
+https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html#package.description
+
+It can contain default methods, static methods, or override methods from the **Object** class, but restricted to only using 1 abstract method. A major reason for doing this is to support the instantiation of functional interfaces via Lambda expressions (which I might discuss at some other time). Note that an interface which is not functional i.e, has more than 1 abstract method can not be instantiated via Lambdas.
+
+**@FunctionalInterface** annotation is used to represent a functional interface, and it will throw compile time error if it has less than 1, or more than 1 abstract method. Amount of default, or static methods doesn’t matter. 
+
+If there is more than one non-default function, then that must be overriding some function of a base class. For example, in the case of the Comparator interface, we have 2 non-default functions **equals** and **compare**
+
+```java
+@FunctionalInterface
+public interface Comparator<T> {
+     
+    int compare(T o1, T o2);
+
+    
+    boolean equals(Object obj);
+}
+```
+
+## Function chain
+
+```java
+    static Function<Integer, Integer> incrementByOneFunction = number -> number + 1;
+    static Function<Integer, Integer> multipleBy10 = number -> number * 10;
+    static Function<Integer, Integer> addBy1AnThenMultiplyBy10 = incrementByOneFunction.andThen(multipleBy10);
+
+  		 //function chaining
+        Integer increment2 = incrementByOneFunction.apply(1);
+        Integer multiply = multipleBy10.apply(increment2);
+        System.out.println(multiply);
+        System.out.println(addBy1AnThenMultiplyBy10.apply(1));
+```
+
+
+
+## BiFunction
+
+BiFunction<T,U,R> Represents a function that accepts two arguments and produces a result.
+
+```java
+ static int incrementByOneAndMultiply(int number, int numToMultiplyBy) {
+        return (number + 1) * numToMultiplyBy;
+    }
+    BiFunction<Integer, Integer, Integer> incrementByOneAndMultiplyFunction =
+        (number, numToMultiplyBy) -> (number + 1) * numToMultiplyBy;
+```
+
+
+
+## Consumer
+
+Consumer<T> Represents an operation that accepts a single input argument and returns no result.
+
+```java
+static void greetCustomer(Customer customer) {
+    System.out.println("Hello " + customer.customerName + " with phone number " + customer.customerPhoneNumber);
+}
+static Consumer<Customer> greetCustomerConsumer = customer
+        -> System.out.println("Hello " + customer.customerName + " with phone number " + customer.customerPhoneNumber);
+```
+
+
+
+## Predicate
+
+Predicate<T> Represents a predicate (boolean-valued function) of one argument.
+
+```java
+    static boolean isPhoneNumberValid(String phoneNumber) {
+        return phoneNumber.startsWith("07") && phoneNumber.length() == 11;
+    }
+
+    static Predicate<String> isPhoneNumberValidPredicate = phoneNumber ->
+            phoneNumber.startsWith("07") && phoneNumber.length() == 11;
+
+    static Predicate<String> containsNumber3 = phoneNumber ->
+            phoneNumber.contains("3");
+}
+```
+
+
+
+## Supplier
+
+Supplier<T> Represents a supplier of results.
+
+# 7 Java Streams
+
+```java
+     List<Person> people = List.of(
+                new Person("John", MALE),
+                new Person("Maria", FEMALE),
+                new Person("Aisha", FEMALE),
+                new Person("Alex", MALE),
+                new Person("Alice", FEMALE),
+                new Person("Bob", PREFER_NOT_TO_SAY)
+        );
+
+Function<Person, String> personStringFunction = person -> person.name;
+ToIntFunction<String> length = String::length;
+IntConsumer println = x -> System.out.println(x);
+
+people.stream().map(person -> person.name)
+        .mapToInt(name -> name.length())
+        .forEach(System.out::println);
+```
+
+## FlatMap
+
+`Stream.flatMap`, as it can be guessed by its name, is the combination of a `map` and a `flat` operation. That means that you first apply a function to your elements, and then flatten it. `Stream.map` only applies a function to the stream without flattening the stream.
+
+To understand what *flattening* a stream consists in, consider a structure like `[ [1,2,3],[4,5,6],[7,8,9] ]` which has "two levels". Flattening this means transforming it in a "one level" structure : `[ 1,2,3,4,5,6,7,8,9 ]`.
+
+# 8 Patterns
+
+## Combinator
+
+The functional pattern representing a style of organizing libraries centered around the idea of combining functions.
+ Putting it simply, there is some type T, some functions for  constructing "primitive" values of type T, and some "combinators" which  can combine values of type T in various ways to build up more complex  values of type T.
+
+```java
+public interface CustomerRegistrationValidator extends Function<Customer, CustomerRegistrationValidator.ValidationResult> {
+
+
+    static CustomerRegistrationValidator isEmailValid () {
+        return customer -> customer.getEmail().contains("@") ? ValidationResult.SUCCESS : ValidationResult.EMAIL_NOT_VALID;
+    }
+
+    static CustomerRegistrationValidator isNumberValid () {
+        return customer -> customer.getPhoneNumber().startsWith("+0") ? ValidationResult.SUCCESS : ValidationResult.PHONE_NUMBER_NOT_VALID;
+    }
+
+    static CustomerRegistrationValidator isAdult () {
+        return customer -> Period.between(customer.getDob(), LocalDate.now()).getYears() > 16 ? ValidationResult.SUCCESS : ValidationResult.IS_NOT_AN_ADULT;
+    }
+
+    default CustomerRegistrationValidator and (CustomerRegistrationValidator other) {
+        return customer -> {
+            ValidationResult result = this.apply(customer);
+            return result.equals(ValidationResult.SUCCESS) ? other.apply(customer) : result;
+        };
+    }
+
+    enum ValidationResult {
+        SUCCESS,
+        PHONE_NUMBER_NOT_VALID,
+        EMAIL_NOT_VALID,
+        IS_NOT_AN_ADULT
+    }
+}
+
+// main method 
+public static void main(String[] args) {
+
+        Customer customer = new Customer(
+                "Alice",
+                "alice@gmail.com",
+                "+0898787879878",
+                LocalDate.of(2000, 1,1)
+        );
+
+        CustomerValidatorService customerValidatorService = new CustomerValidatorService();
+        System.out.println(customerValidatorService.isValid(customer));
+
+        ValidationResult result = isEmailValid()
+                .and(isNumberValid())
+                .and(isAdult())
+                .apply(customer);
+
+        if (result != ValidationResult.SUCCESS) {
+            throw new IllegalStateException(result.name());
+        }
+    }
+```
