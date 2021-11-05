@@ -19,13 +19,13 @@
 
 # **2. What all does JVM comprise of?**
 
-![image-20210906075732377](C:\Projects\my-projects\SpringProjects\NotesAndOther\JavaInterview\img\image-20210906075732377.png)
+![image-20211018140040807](images/image-20211018140040807.png)
 
 ## **Classes & Meta-data** 
 
 Classes! Java has classes, this is easy! Classes form a tree, rooted at Object. They have a super-class and some subclasses (and interfaces). They have fields and methods. They are initialized (or not), and the <clinit> has run (or not). They might have inner classes, or be “Single Abstract Method”. They have instances. They can be abstract or have custom Loaders or Security Domains or annotations or... Meta-data! There is also internal meta-data, not available via reflection. Object field layout: offset & size. Padding. Profiling data on methods, but also on fields, locks, exceptions. JIT’d code. Safepoints and OopMaps. GC and heap-walking support, and much more.
 
-![image-20210906081321779](C:\Projects\my-projects\SpringProjects\NotesAndOther\JavaInterview\img\image-20210906081321779.png)
+![image-20211018140100505](images/image-20211018140100505.png)
 
 ### Single Abstract Method (SAM) and Functional Interface in Java
 
@@ -78,14 +78,14 @@ class Client {
 
  Data is stored in Objects, and Objects are stored in the Heap. Objects are made with ‘new’ and reclaimed with GC. The Heap probably is the largest user of your machine resources. Working with those Objects probably uses most of you dev cycles.
 
-![image-20210906083304012](C:\Projects\my-projects\SpringProjects\NotesAndOther\JavaInterview\img\image-20210906083304012.png)
+![image-20211018140113367](images/image-20211018140113367.png)
 
 The mutator (Java program) “pumps” memory from Free to Live. GC “pumps” memory from Live to Free. These two forces must balance out (or you die Out of Memory), But they have different CPU costs. The allocation rate (and CPU cost) is up to the developer. The GC costs depend on the structure of the heap, and that structure is also up to the developer. But always, fewer objects & pointers cost less than more of either. A million Longs are hugely more expensive than a single long[1000000].
 
 
 ## **Bytecodes and an Execution Model**
 
-![image-20210906083712264](C:\Projects\my-projects\SpringProjects\NotesAndOther\JavaInterview\img\image-20210906083712264.png)
+![image-20211018140125598](images/image-20211018140125598.png)
 
 Since no real machine runs this, the java virtual machine emulates it. The interpreter runs one bytecode at a time, and is fairly slow. But it can start immediately! The interpreter also profiles: it counts functions (and loops), and when the count is large enough, it triggers a compilation. The Just In Time compiler, or JIT, compiles hot bytecodes into real machine code. The JIT’d code runs about 10 times faster than the interpreter.
 
@@ -109,6 +109,27 @@ The JVM Runtime The JVM Runtime is basically a “catch all” for everything el
 ![image-20210906092644962](C:\Users\gmalarski\AppData\Roaming\Typora\typora-user-images\image-20210906092644962.png)
 
 
+
+## Java Garbage Collection
+
+Java Garbage Collection is the process by which Java programs perform automatic memory management. Java programs compile into bytecode that can be run on a Java Virtual Machine (JVM).
+
+When Java programs run on the JVM, objects are created on the heap, which is a portion of memory dedicated to the program.
+
+Over the lifetime of a Java application, new objects are created and released. Eventually, some objects are no longer needed. You can say that at any point in time, the heap memory consists of two types of objects:
+
+- *Live* - these objects are being used and referenced from somewhere else
+- *Dead* - these objects are no longer used or referenced from anywhere
+
+The garbage collector finds these unused objects and deletes them to free up memory.
+
+## **Stack Memory in Java**
+
+**Stack Memory in Java is used for static memory allocation and the execution of a thread.** It contains primitive values that are specific to a method and references to objects that are in a heap, referred from the method.
+
+Access to this memory is in Last-In-First-Out (LIFO) order. Whenever a new method is called, a new block on top of the stack is created which contains values specific to that method, like primitive variables and references to objects.
+
+When the method finishes execution, it’s corresponding stack frame is flushed, the flow goes back to the calling method and space becomes available for the next method.
 
 # 3 Big O
 
@@ -154,24 +175,33 @@ In the Dynamic Polymorphism, a call  to a single overridden method is solved dur
 
 ## Association
 
-Association represents the relationship between the objects. Here,  one object can be associated with one object or many objects. There can  be four types of association between the objects:
+## Association
 
-- One to One
-- One to Many
-- Many to One, and
-- Many to Many
+Association is the weakest relationship between the three. **It isn't a “has-a” relationship**, none of the objects are parts or members of another.
 
-Let's understand the relationship with real-time examples. For  example, One country can have one prime minister (one to one), and a  prime minister can have many ministers (one to many). Also, many MP's  can have one prime minister (many to one), and many ministers can have  many departments (many to many).
+**Association only means that the objects “know” each other.** For example, a mother and her child.
 
-Association can be undirectional or bidirectional.
+
 
 ## Aggregation
 
-Aggregation is a way to achieve Association. Aggregation represents  the relationship where one object contains other objects as a part of  its state. It represents the weak relationship between objects. It is  also termed as a *has-a* relationship in Java. Like, inheritance represents the *is-a* relationship. It is another way to reuse objects.
+Aggregation is also a “has-a” relationship. What distinguishes it from composition, that it doesn't involve owning. As a result, the lifecycles of the objects aren't tied: every one of them can exist independently of each other.
+
+For example, a car and its wheels. **We can take off the wheels, and they'll still exist.** We can mount other (preexisting) wheels, or install these to another car and everything will work just fine.
+
+Of course, a car without wheels or a detached wheel won't be as useful as a car with its wheels on. But that's why this relationship existed in the first place: to **assemble the parts to a bigger construct, which is capable of more things than its parts**.
 
 ## Composition
 
-The composition is also a way to achieve Association. The composition represents the relationship where one object contains other objects as a part of its state. There is a strong relationship between the  containing object and the dependent object. It is the state where  containing objects do not have an independent existence. If you delete  the parent object, all the child objects will be deleted automatically. 
+*Composition* is a “belongs-to” type of relationship. It means that one of the objects is a logically larger structure, which contains the other object. In other words, it's part or member of the other object.
+
+Alternatively, **we often call it a “has-a” relationship** (as opposed to an “is-a” relationship, which is [inheritance](https://www.baeldung.com/java-inheritance)).
+
+For example, a room belongs to a building, or in other words a building has a room. So basically, whether we call it “belongs-to” or “has-a” is only a matter of point of view.
+
+Composition is a strong kind of “has-a” relationship because the containing object owns it. Therefore, **the objects' lifecycles are tied. It means that if we destroy the owner object, its members also will be destroyed with it.** For example, the room is destroyed with the building in our previous example.
+
+Note that doesn't mean, that the containing object can't exist without any of its parts. For example, we can tear down all the walls inside a building, hence destroy the rooms. But the building will still exist.
 
 # 4 Data structures
 
@@ -268,7 +298,7 @@ In Java, the linked list is implemented by the “***LinkedList\***” class. Th
 
 - Listy powiązane są swietnym rozwiązaniem gdy wiadomo że i tak trzeba będzie odczytywać wszystkie elementy na raz, wówczas można odczytać jeden element, odczytać adres następnego itd.
 - Jeżeli zamierzamy odczytywac elementy niereguralnie lista powiązana jest złym wyborem
-- Dostęp sekwencyjny, aby ofczytać 10 element listy należy najpierw odczyta 9 poprzednich
+- Dostęp sekwencyjny, aby odczytać 10 element listy należy najpierw odczyta 9 poprzednich
 - kiedy należy wstawić element do środka listy sa lepszym wyborem, ponieważ wystarczy tylko zmienic referencje następnego elementu oraz poprzedniego, w tablicy natomiast musielibyśmy przesunąć wszystkie elementy znajdujące się za miejscem wstawienia
 - Also, if you have large lists, keep in mind that memory usage is also different. Each element of a `LinkedList` has more overhead since pointers to the next and previous elements are also stored. `ArrayLists` don't have this overhead. However, `ArrayLists` take up as much memory as is allocated for the capacity, regardless of whether elements have actually been added.
 - The default initial capacity of an `ArrayList` is pretty  small (10 from Java 1.4 - 1.8). But since the underlying implementation  is an array, the array must be resized if you add a lot of elements. To  avoid the high cost of resizing when you know you're going to add a lot  of elements, construct the `ArrayList` with a higher initial capacity.
@@ -578,3 +608,435 @@ public static void main(String[] args) {
         }
     }
 ```
+
+
+
+# 9. Exceptions
+
+https://belief-driven-design.com/all-you-ever-wanted-to-know-about-java-exceptions-63d838fedb3/
+
+If a program reaches such an *abnormal* condition, the Java runtime tries to find an appropriate exception handler by going through the call stack. This behavior is called “exception propagation”, and behaves differently regarding the type of exception.
+
+### Checked Exceptions
+
+Checked exceptions are *anticipated*, and *recoverable* events outside of the normal control flow.
+
+A good example is the [`FileNotFoundException`](https://docs.oracle.com/javase/9/docs/api/java/io/FileNotFoundException.html), or [`MalformedURLException`](https://docs.oracle.com/javase/7/docs/api/java/net/MalformedURLException.html).
+
+Because they are supposed to be *anticipated*, the compiler makes sure we declare them on our method signatures, and enforces either handling or propagating them further up the call stack. This is called the *“catch or specify requirement”*.
+
+Checked Exceptions must be propagated explicitly using the `throws` keyword.
+
+All exceptions are checked exceptions, except subclasses of [`RuntimeException`](https://docs.oracle.com/javase/7/docs/api/java/lang/RuntimeException.html) or [`Error`](https://docs.oracle.com/javase/7/docs/api/java/lang/Error.html).
+
+### Unchecked Exceptions
+
+Unchecked exceptions are **not checked by the compiler**. These are called **runtime exceptions**.
+
+Unchecked exceptions are **not** *anticipated* and often supposed to be *unrecoverable*. They are not required to conform to the “catch or specify requirement”.
+
+They will be automatically propagated up the call stack until an appropriate exception handler is found. Or, if none is found, the runtime terminates.
+
+All exceptions subclassing either [`RuntimeException`](https://docs.oracle.com/javase/7/docs/api/java/lang/RuntimeException.html) or [`Error`](https://docs.oracle.com/javase/7/docs/api/java/lang/Error.html) are unchecked.
+
+### Errors
+
+Errors are *unanticipated* and *unrecoverable* events, usually thrown by the runtime itself.
+
+For example, if the runtime runs out of available memory, an [`OutOfMemoryError`](https://docs.oracle.com/javase/7/docs/api/java/lang/OutOfMemoryError.html) is thrown. Or an endless recursive call could create a [`StackOverflowError`](https://docs.oracle.com/javase/7/docs/api/java/lang/StackOverflowError.html). Faulty hardware might lead to an [`IOError`](https://docs.oracle.com/javase/7/docs/api/java/io/IOError.html).
+
+These are all grave errors with almost no possibility to recover gracefully, except printing the current stack trace.
+
+All subclasses of [`Error`](https://docs.oracle.com/javase/7/docs/api/java/lang/Error.html) fall into this category, and by convention are named `...Error` instead of `...Exception`
+
+### Throwable and its Subtypes
+
+![img](https://belief-driven-design.com/images/2020-05-17-all-you-ever-wanted-to-know-about-java-exceptions-01.png)
+
+## Handling Exceptions
+
+### try
+
+A `try` block creates the scope we want to handle exceptions for. It can’t exist without at least one `catch` or a single `finally` block.
+
+### catch
+
+A `catch` block is known as an *exception handler*. The exception type handled must be specified by declaring a variable.
+
+Multiple `catch` blocks with different exception types are possible. But they must be ordered according to their (possible) relationships.
+
+This means the first `catch` block could catch a [`FileNotFoundException`](https://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html), a subtype of [`IOException`](https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html). The next `catch` block can catch [`IOException`](https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html), and all it subtypes directly.
+
+If ordered in reverse, catching [`IOException`](https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html) *before* [`FileNotFoundException`](https://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html), the compiler will complain.
+
+The first block would catch [`FileNotFoundException`](https://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html) because it’s inherited from [`IOException`](https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html)`, making the declaration of the second block invalid.
+
+### Multi-catch
+
+Instead of creating a `catch` for every single exception type we want (or need) to handle, we can combine them, if their handling logic can be consolidated:
+
+```java
+try {
+    ...
+}
+catch (FileNotFound | UnsupportedEncodingException e) {
+    ...
+}
+```
+
+### finally
+
+The `finally` block is an optional code block that is **guaranteed** to execute after the `try` scope is left, either by successfully completing the `try` block, or leaving a `catch` block. It’s the right place for any required cleanup, regardless of the success of the `try` block.
+
+### try-with-resource
+
+Cleaning up resources was usually done in the`finally` block, due to the guarantee to execute in any case:
+
+```java
+FileReader reader = null;
+try {
+    reader = new FileReader("awesome-file.txt");
+
+    int content = 0;
+    while (content != -1) {
+        content = reader.read();
+        ...
+    }
+}
+catch (IOException e) {
+    // handle any exceptions
+}
+finally {
+    if (reader == null) {
+        return;
+    }
+    try {
+        reader.close();
+    } catch (IOException e) {
+        // handle any exception occured on close
+    }
+}
+```
+
+Objects implementing [`AutoCloseable`](https://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html) can be created right after the `try` keyword, surrounded by parenthesis. We’re not restricted to a single object, multiple object creation can be separated by a semi-colon(`;`):
+
+```java
+try (Socket socket = new Socket();
+     InputStream input = new DataInputStream(socket.getInputStream());
+     OutputStream output = new DataOutputStream(socket.getOutputStream())) {
+         ...
+}
+```
+
+### Exception Flow
+
+![img](https://belief-driven-design.com/images/2020-05-17-all-you-ever-wanted-to-know-about-java-exceptions-02.png)
+
+### throw
+
+Java uses the keyword `throw` to leave the normal control flow and propagate an exception to an appropriate handler:
+
+```java
+public void logMessage(String message) {
+    if (message == null) {
+        throw new NullPointerException("'message' must not be null'");
+    }
+
+    if (message.isEmpty()) {
+        throw new IllegalArgumentException("'message' must not be empty");
+    }
+
+    // ...
+}
+```
+
+The keyword must be followed by an instance of a [`Throwable`](https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html) or subclass. It doesn’t have to be `new`, we can even re-`throw` an exception in a `catch` block.
+
+*Checked* exceptions must still oblige the “catch or specify requirement”, so we need either directly catch the exception (doesn’t make sense), or use the next keyword, `throws`, instead.
+
+### throws
+
+With the help of the keyword `throws`, we can *specify* any thrown *checked* exceptions directly on a method signature. This makes the compiler happy by satisfying the “catch or specify requirement”.
+
+The exception doesn’t have to be thrown directly in the scope of the method. Any called code might throw the exception, and our method will propagate the exception further up the call stack:
+
+```java
+interface MyInterface {
+
+    void doWork() throws IOException;
+}
+
+
+class MyClass {
+
+    public void moreWork() throws FileNotFoundException {
+        ...
+    }
+}
+```
+
+### Modifying types thrown
+
+Sub-types can use the original `throws` declaration or modify it:
+
+- Throw a subclass of the original exception:
+  `throws Exception` -> `throws IOException`
+- Remove the `throws` declaration: `throws Exception` -> n/a
+
+Java itself used this feature to implement [`AutoCloseable`](https://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html), by making it the parent class of [`Closeable`](https://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html):
+
+```java
+public interface AutoCloseable {
+  
+    void close() throws Exception;
+}
+
+public interface Closeable extends AutoCloseable {
+
+    void close() throws IOException;
+}
+```
+
+Now `try-with-resource` works for every previously existing type that implement [`Closeable`](https://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html), without changing any of our code.
+
+Although it wouldn’t be strictly necessary to change any implementation, because [`IOException`](https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html) is a subclass of [`Exception`](https://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html), it would have changed the method signature of code that’s not maintained by Java.
+
+This feature also can lead to weird behavior, regarding which type we use:
+
+```java
+interface WithException {
+
+    void doWork() throws IOException;
+}
+
+class WithoutException implements WithException {
+
+    // We omit the exception in the implementation
+    @Override
+    public void doWork() {
+        ...
+    }
+}
+
+// Won't compile without try-catch
+WithException with = new WithoutException();
+
+// Compiler won't complain
+WithoutException without = new WithoutException();
+```
+
+## Creating Custom Exceptions
+
+We can `throw` custom exceptions directly, or we can re-`throw` them as a *chained* exception.
+
+### Providing a Benefit
+
+A custom exception should always provide a benefit, not just replicating an existing exception and its purpose with a new type. By adding additional fields, we can supply more information, allowing special handling for a particular case. Usually, an exception tells us *what* happened, but not much about *why* it happened. With a custom exception, it can:
+
+```java
+public class ValidationException extends Exception {
+
+    private final String field;
+
+    public ValidationException(String field,
+                           String message,
+                           Throwable cause) {
+        super(message, cause);
+        this.field = field;
+    }
+
+    public String getField() {
+        return this.field;
+    }
+}
+```
+
+### Business Logic Exceptions
+
+So far, we’ve used exceptions to describe and handle disruptive events in the normal control flow. But we can use exceptions to reflect disruptions in our business logic, too:
+
+```java
+public class CustomerRegistrationException extends Exception {
+
+    private final String email;
+
+    public CustomerRegistrationException(String email) {
+        super("Registration failed for " + email);
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+}
+```
+
+## Performance Implications
+
+A `try-catch` block is almost free.
+
+The compiler adds an exception table with the corresponding range to the method and the target position for handling it
+
+### Throwing Exceptions
+
+We don’t have to worry about the performance impact of throwing an exception. It’s just a single opcode: [`athrow`](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html#jvms-6.5.athrow). The bigger problem is that we need an instance of an exception type to throw, and its creation can be very costly.
+
+Usually, the creation of objects is easily determinable and constant in complexity. Exceptions, on the other hand, are not, due to containing a stack trace.
+
+At creation time, an exception will gather all stack frames in the current call stack, so we can access it with [`Throwable#getStackTrace()`](https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html#getStackTrace()). The deeper the current call stack is, the costlier its gathering will be. Even if we actually don’t care about the stack trace and might only pop one or two stack frames.
+
+Throwing repeatedly in short succession is most likely a bigger problem. It can become so costly for the runtime, that it might omit the stack trace if too many exceptions are created repeatedly.
+
+But if we really want to make sure that the stack trace is always included, regardless of its cost, we can use the JVM option [`-XX:-OmitStackTraceInFastThrow`](https://www.oracle.com/technetwork/java/javase/relnotes-139183.html#vm).
+
+## Dos & Don’ts
+
+### Be As Specific As Possible
+
+The catcher can decide to only handle a broader type, but can’t change the specificity of the thrown type. So if we can provide the handler with more differentiable options, we should.
+
+Let’s check out the type hierarchy of [`ClosedByInterruptException`](https://docs.oracle.com/javase/7/docs/api/java/nio/channels/ClosedByInterruptException.html):
+
+```java
+java.lang.Throwable
+  java.lang.Exception
+    java.io.IOException
+      java.nio.channels.ClosedChannelException
+        java.nio.channels.AsynchronousCloseException
+          java.nio.channels.ClosedByInterruptException
+```
+
+These are distinct exceptions for different kinds of disruptions of the normal control flow. And each one might be handled differently. If the handler doesn’t care about the finer details, they can use `catch (IOException e)`instead of a more specific type.
+
+### Document Exceptions with Javadoc
+
+All exceptions thrown by a method should be documented with Javadoc’s [`@throw  `](https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html#throwstag).
+
+You might argue that *unchecked exceptions* are not part of the method contract, and therefore shouldn’t be documented. That’s a valid viewpoint, they represent what happens when the contract gets violated, and are most likely unrecoverable.
+
+But in my opinion, every shred of extra information to fulfill such a contract might help. If a method doesn’t allow `null` for an argument, why not communicate it clearly with documenting a possible [`NullPointerException`](https://docs.oracle.com/javase/7/docs/api/java/lang/NullPointerException.html)?
+
+When deciding against documenting such an exception, we need to at least specify all requirements with [`@param`](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javadoc.html#param).
+
+### Descriptive and Helpful Messages
+
+Exceptions are an essential tool for debugging, especially in logs. That’s why every exception deserves a meaningful, descriptive, and helpful message. There are 3 parts an exception can contribute:
+
+- **What happened?** The exception type
+- **Where did it happen?** The stack trace
+- **Why did it happen?** The message
+
+### Nested try blocks
+
+Even though nested `try`-blocks are possible, we should avoid them.
+
+Besides from unnecessary complexity and less readability, any thrown exception in an inner block might be propagated to an outer `try`-block, if not handled, which could lead to subtle bugs.
+
+Nested `try`-blocks should be refactored into multiple methods. This will make the code easier to reason with.
+
+### Don’t just Log & Rethrow
+
+Never catch an exception just to log it, and throw it again:
+
+```java
+try {
+    doWork();
+}
+catch (NullPointerException e) {
+    log.error("doWork() failed", e);
+    throw e;
+}
+```
+
+### Don’t Swallow Exceptions
+
+Exceptions fulfill a purpose, don’t just ignore them:
+
+Like “Don’t just Log & Rethrow”, either handle an exception or let it propagate.
+
+There are situations where we are not really interested in exception details and don’t want to propagate it further. Maybe we should at least log it, instead.
+
+### Too Many throws
+
+Too many exceptions in the `throws` clause is an indicator of a method design weakness.
+
+In an ideal world, methods wold be small, self-contained, side-effect free blocks of code. If we need to add more and more exception types to `throws`, it’s a good sign the method is doing *too much*.
+
+It’s better to have multiple methods, with a single `throws`, instead of an “everything” method, accumulating all exceptions.
+
+### Avoid Catching Exception or Throwable
+
+Just like we should be specific when throwing exceptions, catching them comes down to the same thing. We shouldn’t catch [`Exception`](https://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html) or [`Throwable`](https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html) directly. Use more specific types instead.
+
+After catching more specific types, we might add an additional `catch` block with `Exception` to handle any additional cause. But it’s a cheap “cop-out”, why not propagate it further, so someone might handle it appropriately?
+
+### throw & finally
+
+The `finally` block is ensured to run after leaving a `try` block or its `catch` blocks.
+
+What happens if we `throw` another exception in the `finally` block?
+
+The `finally` block’s exception will cancel out any otherwise propagated exception:
+
+```java
+try {
+    // might throw IllegalArgumentException
+    doWork();
+
+    // might throw ArithmeticException
+    doMoreWork();
+}
+catch (IllegalArgumentExcetion e) {
+    // handle exception
+}
+finally {
+    // might throw IOException
+    cleanup();
+}
+```
+
+The [`ArithmeticException`](https://docs.oracle.com/javase/7/docs/api/java/lang/ArithmeticException.html) is supposed to be propagated to the callee. But if `cleanup()` throws an [`IOException`](https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html), the original exception will be lost.
+
+Another aspect to consider is the opposite: if we throw another exception in either the `try` or `catch` block, the `finally` block will still be executed:
+
+```java
+try {
+    // might throw IOException
+    doWork();
+
+    doMoreWorkRequireingCleanup();
+}
+catch (IOException e) {
+    throw new RuntimeExcetpion(e)
+}
+finally {
+    // Will be called regardless of IOException
+    cleanup();
+}
+```
+
+### Exceptions != Goto
+
+I’ve previously shown that in the non-exception case, it might be even faster than an additional `if`-check. But if an exception occurs, the costs are significant.
+
+Never replace a simple `null`-check with catching a [`NullPointerException`](https://docs.oracle.com/javase/7/docs/api/java/lang/NullPointerException.html).
+
+Or checking array sizes with catching [`ArrayIndexOutOfBoundsException`](https://docs.oracle.com/javase/7/docs/api/java/lang/ArrayIndexOutOfBoundsException.html).
+
+We should use the tools provided by the JVM, like exception handling, the way they were intended. Only this way can we be sure to get the best performance out of them.
+
+# Questions to answer
+
+Load balancer?
+
+Lazy and Eager in database/hiberante
+
+Jak dziala dostep do bazy rownolegly, przez kilka zasobow naraz.
+
+Out of memory GG
+
+REstluf API - principles
+
+Hibernate object initialization
+
+Watki, metoda synchorized a zwykła metoda
