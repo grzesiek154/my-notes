@@ -203,6 +203,121 @@ Composition is a strong kind of “has-a” relationship because the containing 
 
 Note that doesn't mean, that the containing object can't exist without any of its parts. For example, we can tear down all the walls inside a building, hence destroy the rooms. But the building will still exist.
 
+
+
+## Using an Interface vs. Abstract Class in Java
+
+### When to Use an Interface
+
+Let's look at some scenarios when one should go with an interface:
+
+- If the problem needs to be solved using multiple inheritances and is composed of different class hierarchies
+- When unrelated classes implement our interface. For example, [Comparable](https://www.baeldung.com/java-comparator-comparable#comparable) provides the *compareTo()* method that can be overridden to compare two objects
+- When application functionalities have to be defined as a contract, but not concerned about who implements the behavior. i.e., third-party vendors need to implement it fully
+
+**Consider using the interface when our problem makes the statement “A is capable of [doing this]”**. For example, “Clonable is capable of cloning an object”, “Drawable is capable of drawing a shape”, etc.
+
+Let us consider an example that makes use of an interface:
+
+```java
+public interface Sender {
+    void send(File fileToBeSent);
+}
+public class ImageSender implements Sender {
+    @Override
+    public void send(File fileToBeSent) {
+        // image sending implementation code.
+    }
+}
+```
+
+Here, *Sender* is an interface with a method *send()*. Hence, “Sender is capable of sending a file” we implemented it as an interface. *ImageSender* implements the interface for sending an image to the target. We can further use the above interface to implement *VideoSender*, *DocumentSender* to accomplish various jobs.
+
+Consider a unit test case the makes use of the above interface and its implemented class:
+
+```java
+@Test
+void givenImageUploaded_whenButtonClicked_thenSendImage() { 
+ 
+    File imageFile = new File(IMAGE_FILE_PATH);
+ 
+    Sender sender = new ImageSender();
+    sender.send(imageFile);
+}
+```
+
+### When to Use an Abstract Class
+
+Now, let's see some scenarios when one should use the abstract class:
+
+- When trying to use the inheritance concept in code (share code among many related classes), by providing common base class methods that the subclasses override
+- If we have specified requirements and only partial implementation details
+- While classes that extend abstract classes have several common fields or methods (that require non-public modifiers)
+- If one wants to have non-final or non-static methods to modify the states of an object
+
+**Consider using abstract classes and inheritance when our problem makes the evidence “A is a B”.** For example, “Dog is an Animal”, “Lamborghini is a Car”, etc.
+
+Let's look at an example that uses the abstract class:
+
+```java
+public abstract class Vehicle {
+    
+    protected abstract void start();
+    protected abstract void stop();
+    protected abstract void drive();
+    protected abstract void changeGear();
+    protected abstract void reverse();
+    
+    // standard getters and setters
+}
+public class Car extends Vehicle {
+
+    @Override
+    protected void start() {
+        // code implementation details on starting a car.
+    }
+
+    @Override
+    protected void stop() {
+        // code implementation details on stopping a car.
+    }
+
+    @Override
+    protected void drive() {
+        // code implementation details on start driving a car.
+    }
+
+    @Override
+    protected void changeGear() {
+        // code implementation details on changing the car gear.
+    }
+
+    @Override
+    protected void reverse() {
+        // code implementation details on reverse driving a car.
+    }
+}
+```
+
+In the above code, the *Vehicle* class has been defined as abstract along with other abstract methods. It provides generic operations of any real-world vehicle and also has several common functionalities. The *Car* class, which extends the *Vehicle* class, overrides all the methods by providing the car's implementation details (“Car is a Vehicle”).
+
+Hence, we defined the *Vehicle* class as abstract in which the functionalities can be implemented by any individual real vehicle like cars and buses. For example, in the real world, starting a car and bus is never going to be the same (each of them needs different implementation details).
+
+Now, let's consider a simple unit test that makes use of the above code:
+
+```java
+@Test
+void givenVehicle_whenNeedToDrive_thenStart() {
+
+    Vehicle car = new Car("BMW");
+
+    car.start();
+    car.drive();
+    car.changeGear();
+    car.stop();
+}
+```
+
 # 4 Data structures
 
 ## Array
@@ -546,6 +661,30 @@ people.stream().map(person -> person.name)
 `Stream.flatMap`, as it can be guessed by its name, is the combination of a `map` and a `flat` operation. That means that you first apply a function to your elements, and then flatten it. `Stream.map` only applies a function to the stream without flattening the stream.
 
 To understand what *flattening* a stream consists in, consider a structure like `[ [1,2,3],[4,5,6],[7,8,9] ]` which has "two levels". Flattening this means transforming it in a "one level" structure : `[ 1,2,3,4,5,6,7,8,9 ]`.
+
+
+
+Stream `flatMap()` method has following syntax.
+
+```java
+<R> Stream<R> flatMap(Function<? ``super` `T,? ``extends` `Stream<? ``extends` `R>> mapper)
+```
+
+- `R` represents the element type of the new stream.
+- `mapper` is a non-interfering, stateless function to apply to each element which produces a stream of new values.
+- The method returns a new stream of objects of type `R`.
+
+`Stream` interface has three more similar methods which produce `IntStream`, `LongStream` and `DoubleStream` respectively after the `flatMap()` operation. If the streams created after `flatMap()` operations return above given types then consider using these functions directly.
+
+```java
+IntStream flatMapToInt(Function<? ``super` `T,? ``extends` `IntStream> mapper)``LongStream flatMapToLong(Function<? ``super` `T,? ``extends` `LongStream> mapper)``DoubleStream flatMapToDouble(Function<? ``super` `T,? ``extends` `DoubleStream> mapper)
+```
+
+- `flatMap()` is an **intermediate** operation and return another stream as method output return value.
+- It returns a stream consisting of the results of replacing each element of the given stream with the contents of a mapped stream produced by  applying the provided mapping function to each element.
+- The `mapper` function used for transformation in `flatMap()` is a stateless function and returns only a stream of new values.
+- Each mapped stream is closed after its contents have been placed into new Stream.
+- `flatMap()` operation flattens the stream; opposite to `map()` operation which does not apply flattening.
 
 # 8 Patterns
 
@@ -1040,3 +1179,234 @@ REstluf API - principles
 Hibernate object initialization
 
 Watki, metoda synchorized a zwykła metoda
+
+# 10. Multithreading
+
+The ability to execute several programs simultaneously is called **Multitasking**. In system’s terminology is called as Multithreading. Here the main  program is divided into two or more subprograms (processes) which can be implemented at the same time parallel.
+
+## What is Thread?
+
+A thread is similar to a program that has a single flow of control. Every program has at least one thread and the thread has a beginning, body  and an end. And it executes commands sequentially. So Multithreading  means executing more than one commands in parallel. The special thing is Java supports for the Multithreading.
+
+So Java enables us to use multiple flows of control in developing  programs. Each flow of control (Thread) runs in parallel to others. A  program which contains multiple flows of control called a **MultiThreaded Program**.
+
+Let's assume that the program has Threads like
+
+```
+Main Thread 
+Thread A 
+Thread B
+Thread C 
+```
+
+Now first of all the **main Thread** initiate. Then **Thread A, B, and C** run concurrently and share the resource jointly. Since threads in Java  are subprograms of the main application program and share the same  memory space, they are known as **Light- Weight Threads.**
+
+**Important: Remember threads running in parallel does not really mean that they run at the same time. All the threads are running on a single processor and the execution shared between the threads. The Java compiler handles  switching the control between the threads.**
+
+## The life cycle of a Thread
+
+During the lifetime of a Thread, There are many states it can enters.
+
+- **Newborn State** — When we create a thread Object, The Thread is born and it is in the newborn state.
+- **Runnable State** — Thread is ready for execution and waiting for the availability of processor.
+- **Running State** — The processor has given it’s time to the execution.
+- **Blocked State** — Thread is prevented from entering into the runnable state and running state. This happens when the Thread is suspended, slept or waited in  order to satisfy certain requirements.
+- **Dead State** — Running Thread ended his life cycle and completed executing the run method.
+
+## Thread Exceptions
+
+Sleep() method should enclose in a try block and follow by a catch block. This  is important because the sleep method throws an exception which should  be caught. If we do not catch the exception the program will not  compile.
+
+Java will throw an exception named [**IllegalThreadStateException** ](https://stackoverflow.com/questions/7315941/java-lang-illegalthreadstateexception)whenever we attempt to invoke a method that a thread cannot handle in a given state.
+
+**Example:** Sleeping method cannot deal with the resume() method because the sleeping thread cannot receive any instructions.
+
+## **How to create a Thread?**
+
+There are two ways to create a thread:
+
+1. By extending Thread class
+2. By implementing Runnable interface.
+
+The approach can be used depending on what the class we are creating require.
+
+## 1. By extending Thread class
+
+Thread class provide constructors and methods to create and perform operations on a thread. Thread class extends Object class and implements Runnable  interface.
+
+## Steps:
+
+- Declare the class as extending the Thread Class.
+- Implement the run method.
+- Create the thread Object and call the Start method
+
+```java
+package threadtutorial;
+ class Multi extends Thread{
+    @Override
+    public void run(){
+//your code here
+        System.out.println("thread is running...");
+    }
+}
+public class ThreadTutorial {public static void main(String[] args) {
+        Multi t1 = new Multi();  
+        t1.start();}
+    
+}
+```
+
+Here ***Multi t1 = new Multi();\*** statement creates the Object. The Thread that will run this Object is not yet running. The Thread is in a newborn state.
+
+Now ***t1.start();\*** statement leads the thread move to the runnable state. Then the Java interpreter  will schedule the thread to run by invoking this ***run()\*** method***.\*** Now the Thread is in **running** state.
+
+## How to stop a Thread?
+
+Whenever we want to stop a Thread from running state we should call it’s stop() method. It will move the Thread’s **Running state** to the **Dead state**.
+
+The thread will move to the dead state automatically when it reaches the end of its method.
+
+- sleep(); —Thread gets started after a specified time interval unless it is interrupted.
+- suspend(); — This method puts a thread in the suspended state and can be resumed using resume() method.
+- wait(); — Causes the current thread to wait until another thread invokes the notify().
+- notify(); — Wakes up a single thread that is waiting on this object’s monitor.
+- resume(); — This method resumes a thread, which was suspended using suspend() method.
+- stop(); — This method stops a thread completely.
+
+## The difference between wait() and sleep()
+
+***wait()\* is an instance method that’s used for thread synchronization.** It can be called on any object, as it’s defined right on *java.lang. Object,* but it can **only be called from a synchronized block**. It releases the lock on the object so that another thread can jump in and acquire a lock. On the other hand, *Thread.sleep()* is a static method that can be called from any context. ***Thread.sleep()\* pauses the current thread and does not release any locks.**
+
+When we use the *sleep()* method, a thread gets started after a specified time interval, unless it is interrupted.
+
+For *wait()*, the waking up process is a bit more complicated. We can wake the thread by calling either the *notify()* or *notifyAll()* methods on the monitor that is being waited on.
+
+Use *notifyAll()* instead of *notify()* when you want to wake all threads that are in the waiting state. Similarly to the *wait()*method itself, *notify()*, and *notifyAll()* have to be called from the synchronized context.
+
+```java
+class Test extends Thread{
+    public void run(){
+        for (int i = 0; i < 10; i++) {
+            if(i == 5){
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println(i);
+        }
+    }
+}public class ThreadTutorial {public static void main(String[] args) {Test test = new Test();
+        test.start();}    
+}
+```
+
+## Thread Priority
+
+In Java, we can assign a priority to a Thread which affects the order in  the schedule for running. The Threads which have the same priority has  an equal priority (This done by the Java scheduler) and they share the  processor on a first come first serve manner.
+
+We can set a Priority of a Thread using **setpriority()** method as follows.
+
+Thread class defines several priority constants.
+
+- **MIN_PRIORITY** = 1
+- **MAX_PRIORITY** = 10
+
+## Exercise:
+
+A program which includes Class A and Class B. The Class A uses a thread  to display numbers from 1–10 and Class B uses a Thread to display  numbers 10 -1. Priority as **Class A Thread — Max and Class B Thread — Min**
+
+```java
+class A extends Thread{
+    public void run(){
+        System.out.println("Class A method...");
+        for (int i = 0; i < 10; i++) {
+            System.out.println(i);
+        }
+    }
+}class B extends Thread{
+    public void run(){
+        System.out.println("Class B method...");
+        for (int i = 10; i > 0; i--) {
+            System.out.println(i);
+        }
+    }
+}
+public class ThreadTutorial {public static void main(String[] args) {
+        A a = new A();
+        B b = new B();
+        
+        a.setPriority(Thread.MAX_PRIORITY);
+        b.setPriority(Thread.MIN_PRIORITY);
+        
+        a.start();
+        b.start();}
+    
+}
+```
+
+## Synchronization
+
+In the run, method Threads try to use some resources which lie inside the  run method as well as outside the run method. If two Threads try to  reach the same resource there may be happening a problem. Then Java  gives us a technique to overcome this problem named **Synchronization**. Here we can use a synchronized method to implement **Synchronization** mechanism**.**
+
+The synchronization is mainly used to
+
+1. To prevent thread interference.
+2. To prevent consistency problem.
+
+When we declare a method as synchronized, Java creates a monitor and hand it over to the Thread which is first called. Other threads cannot access  to that synchronized code segment.
+
+## 2. By implementing Runnable interface
+
+The runnable interface declares the run() method that is required for implementing threads in our programs.
+
+## Steps:
+
+- Declare the class as implementing the Runnable Interface.
+- Implement the run method
+- Create a thread by defining an Object that is instantiated from this runnable class as the target of the Thread
+- Call the thread’s start() method to run the thread
+
+```java
+class Test implements Runnable{
+    public void run(){
+        for (int i = 0; i < 10; i++) {
+            System.out.println(i);
+        }
+    }
+}public class ThreadTutorial {public static void main(String[] args) {Test test = new Test();
+        Thread thread = new Thread(test);
+        thread.start();}    
+}
+```
+
+# 11. Equals vs "=="
+
+Jorman is a successful businessman and has 2 houses.
+
+![enter image description here](https://i.stack.imgur.com/xLcfG.png)
+
+But others don't know that.
+
+## Is it the same Jorman?
+
+When you ask neighbours from either Madison or Burke streets, this is the only thing they can say:
+
+![enter image description here](https://i.stack.imgur.com/ZjMlG.png)
+
+Using the residence alone, it's tough to confirm that it's the same Jorman. Since they're 2 different addresses, it's just natural to assume that those are 2 different persons.
+
+**That's how the operator `==` behaves.** So it will say that `datos[0]==usuario` is false, because it only *compares the addresses*.
+
+## An Investigator to the Rescue
+
+What if we sent an investigator? We know that it's the same Jorman, but we need to prove it. Our detective will look closely at all physical aspects. With thorough inquiry, the agent will be able to conclude whether it's the same person or not. Let's see it happen in Java terms.
+
+Here's the source code of String's `equals()` method:
+
+![enter image description here](https://i.stack.imgur.com/6MYZy.png)
+
+It compares the Strings character by character, in order to come to a conclusion that they are indeed equal.
+
+**That's how the String `equals` method behaves.** So `datos[0].equals(usuario)` will return true, because it performs a *logical comparison*.
